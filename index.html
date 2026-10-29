@@ -60,6 +60,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1
 .icbtn{cursor:pointer;border:1px solid var(--line);background:var(--surface2);color:var(--ink);
   border-radius:9px;width:36px;height:34px;font-size:1rem;display:inline-flex;align-items:center;justify-content:center}
 .icbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.icbtn.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+:root:fullscreen,:root:-webkit-full-screen{background:var(--bg)}
+:fullscreen .app,:-webkit-full-screen .app{max-width:1400px}
+body.pfs{overflow:hidden}
+body.pfs .app{position:fixed;inset:0;max-width:none;z-index:999;background:var(--bg);padding-inline:14px}
 
 /* stage */
 .stage{flex:1;min-height:0;position:relative;
@@ -148,6 +153,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1
   <div class="top">
     <div class="brand">ভেক্টর অনুশীলন <span>· একাদশ শ্রেণি · পদার্থবিজ্ঞান</span></div>
     <span class="sp"></span>
+    <button class="icbtn" id="fsBtn" title="ফুল স্ক্রিন" aria-label="ফুল স্ক্রিন" aria-pressed="false">⛶</button>
     <button class="icbtn" id="themeBtn" title="থিম বদলাও" aria-label="থিম বদলাও">◐</button>
   </div>
 
@@ -517,6 +523,20 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1
   canvas.addEventListener("pointerup",endDraw);
   canvas.addEventListener("pointercancel",endDraw);
   canvas.addEventListener("pointerleave",endDraw);
+
+  // ---- fullscreen (laptop / iPad native; CSS fallback where unsupported, e.g. iPhone) ----
+  var fsBtn=document.getElementById("fsBtn");
+  function inFs(){ return !!(document.fullscreenElement||document.webkitFullscreenElement)||document.body.classList.contains("pfs"); }
+  function setFsBtn(){ var on=inFs(); fsBtn.textContent=on?"⤢":"⛶"; fsBtn.classList.toggle("on",on);
+    fsBtn.setAttribute("aria-pressed",on?"true":"false"); fsBtn.title=on?"ফুল স্ক্রিন বন্ধ":"ফুল স্ক্রিন"; setTimeout(sizeCanvas,80); }
+  function pseudoFs(on){ document.body.classList.toggle("pfs",on); setFsBtn(); }
+  function enterFs(){ var el=document.documentElement; var req=el.requestFullscreen||el.webkitRequestFullscreen;
+    if(req){ try{ var p=req.call(el); if(p&&p.catch) p.catch(function(){pseudoFs(true);}); }catch(e){ pseudoFs(true); } } else { pseudoFs(true); } }
+  function exitFs(){ if(document.body.classList.contains("pfs")){ pseudoFs(false); return; }
+    var ex=document.exitFullscreen||document.webkitExitFullscreen; if(ex){ try{ ex.call(document); }catch(e){} } }
+  fsBtn.addEventListener("click",function(){ inFs()?exitFs():enterFs(); });
+  document.addEventListener("fullscreenchange",setFsBtn);
+  document.addEventListener("webkitfullscreenchange",setFsBtn);
 
   // ---- theme toggle ----
   themeBtn.addEventListener("click",function(){
