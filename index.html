@@ -54,8 +54,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1
 
 /* top strip */
 .top{display:flex;align-items:center;gap:10px;padding:10px 4px 8px;flex:none}
-.brand{font-family:var(--disp);font-weight:700;font-size:1.05rem}
-.brand span{color:var(--muted);font-weight:500;font-size:.85rem;font-family:var(--body)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:36px;height:36px;flex:none;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--accent),#ff9356);box-shadow:0 3px 10px rgba(229,72,77,.35)}
+.logo svg{width:21px;height:21px}
+.btext{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.bname{font-family:var(--disp);font-weight:700;font-size:1.04rem;white-space:nowrap}
+.bsub{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{font-family:var(--mono);font-size:.72rem;color:var(--blue);background:var(--blue-soft);
+  border:1px solid var(--line);border-radius:999px;padding:4px 11px;white-space:nowrap}
 .top .sp{flex:1}
 .icbtn{cursor:pointer;border:1px solid var(--line);background:var(--surface2);color:var(--ink);
   border-radius:9px;width:36px;height:34px;font-size:1rem;display:inline-flex;align-items:center;justify-content:center}
@@ -73,6 +80,10 @@ body.pfs .app{position:fixed;inset:0;max-width:none;z-index:999;background:var(-
   background-size:30px 30px;
   border:1px solid var(--line);border-radius:16px;overflow:hidden;
   box-shadow:0 10px 30px rgba(18,26,54,.08)}
+.wm{position:absolute;inset:0;z-index:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none;text-align:center;padding:24px}
+.wm .wm1{font-family:var(--disp);font-weight:700;font-size:clamp(1.6rem,7vw,3.4rem);color:var(--ink);opacity:.055;letter-spacing:.01em}
+.wm .wm2{font-family:var(--mono);font-size:clamp(.7rem,2.4vw,1rem);color:var(--ink);opacity:.07;letter-spacing:.34em;text-transform:uppercase;margin-top:.5em}
 .slides{position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch}
 .slide{display:none;min-height:100%;padding:26px clamp(18px,4vw,46px);flex-direction:column;justify-content:center}
 .slide.active{display:flex}
@@ -134,12 +145,16 @@ body.pfs .app{position:fixed;inset:0;max-width:none;z-index:999;background:var(-
 .sw{width:30px;min-width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
 .sw.on{outline:2px solid var(--ink);outline-offset:2px;border-color:var(--surface)}
 .tgrp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.hint{flex:none;text-align:center;color:var(--muted);font-size:.8rem;padding:2px 0 8px}
+.hint{flex:none;text-align:center;color:var(--muted);font-size:.8rem;padding:2px 0 8px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px}
 .hint b{color:var(--ink)}
+.hint .cr{font-family:var(--mono);font-size:.76rem}
+.hint .cr b{color:var(--accent)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
 @media (max-width:620px){
   .topic{display:none}
+  .bsub,.chip{display:none}
+  .bname{font-size:.95rem}
   .toolbar{gap:6px;padding:8px}
   .navbtn{padding:8px 10px}
   .tool{height:36px;min-width:38px}
@@ -151,13 +166,18 @@ body.pfs .app{position:fixed;inset:0;max-width:none;z-index:999;background:var(-
 <body>
 <div class="app">
   <div class="top">
-    <div class="brand">ভেক্টর অনুশীলন <span>· একাদশ শ্রেণি · পদার্থবিজ্ঞান</span></div>
+    <div class="brand">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19 19 5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M11 5h8v8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="btext"><span class="bname">Physics Smart Class</span><span class="bsub">Dr. Biplab Bawali · PhD Physics (IISc)</span></span>
+    </div>
     <span class="sp"></span>
+    <span class="chip">ভেক্টর · একাদশ</span>
     <button class="icbtn" id="fsBtn" title="ফুল স্ক্রিন" aria-label="ফুল স্ক্রিন" aria-pressed="false">⛶</button>
     <button class="icbtn" id="themeBtn" title="থিম বদলাও" aria-label="থিম বদলাও">◐</button>
   </div>
 
   <div class="stage" id="stage">
+    <div class="wm" aria-hidden="true"><span class="wm1">Physics Smart Class</span><span class="wm2">Dr. Biplab Bawali</span></div>
     <div class="slides" id="slides">
 
       <section class="slide" data-level="mod">
@@ -401,7 +421,7 @@ body.pfs .app{position:fixed;inset:0;max-width:none;z-index:999;background:var(-
       <button class="tool" id="clearBtn" title="এই স্লাইডের সব আঁকা মুছুন">🗑</button>
     </div>
   </div>
-  <div class="hint">মোটা অক্ষর = <b>ভেক্টর</b> · <span class="m" style="padding:.04em .3em">î ĵ k̂</span> = একক ভেক্টর · <b>✏ আঁকা</b> চালু করে স্লাইডে লেখা/দাগ দেওয়া যায় · কীবোর্ড ← → দিয়ে স্লাইড বদলাও</div>
+  <div class="hint"><span class="cr"><b>Physics Smart Class</b> · Dr. Biplab Bawali · 📞 7980143221</span><span class="tip"><b>✏ আঁকা</b> দিয়ে স্লাইডে লেখা যায় · ← → স্লাইড · মোটা অক্ষর = ভেক্টর</span></div>
 </div>
 
 <script>
