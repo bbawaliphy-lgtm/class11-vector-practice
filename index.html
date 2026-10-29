@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}body{font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ভেক্টর অনুশীলন</title>
+<meta name="description" content="একাদশ শ্রেণির ভেক্টর অধ্যায়ের ২০টি সংখ্যাগত সমস্যা, সমাধান লুকানো।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: blueprint/graph-paper physics worksheet — sticky control bar, single column of problem cards, solutions reveal in place */
+:root{
+  --bg:#eef1f8; --grid:#dde3f0;
+  --surface:#ffffff; --surface2:#f6f8fc;
+  --ink:#1a2238; --muted:#5b6478; --line:#dde3ee;
+  --accent:#e5484d; --accent-soft:#fdecec;
+  --blue:#2f66e0; --blue-soft:#e9f0fd;
+  --mod:#b26a00; --mod-bg:#fdf1dc;
+  --hard:#c0362c; --hard-bg:#fbe7e4;
+  --ok:#1f8a54;
+  --disp:'Noto Serif Bengali',Georgia,serif;
+  --body:'Noto Sans Bengali','Segoe UI',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f131c; --grid:#1b2130;
+  --surface:#161c28; --surface2:#1b2230;
+  --ink:#e7ecf6; --muted:#98a2b7; --line:#28303f;
+  --accent:#ff6b6f; --accent-soft:#2a1a1d;
+  --blue:#6ea0ff; --blue-soft:#17233c;
+  --mod:#f0b44a; --mod-bg:#2c2412;
+  --hard:#ff7a6e; --hard-bg:#301b18;
+  --ok:#4cc585;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f131c; --grid:#1b2130;
+  --surface:#161c28; --surface2:#1b2230;
+  --ink:#e7ecf6; --muted:#98a2b7; --line:#28303f;
+  --accent:#ff6b6f; --accent-soft:#2a1a1d;
+  --blue:#6ea0ff; --blue-soft:#17233c;
+  --mod:#f0b44a; --mod-bg:#2c2412;
+  --hard:#ff7a6e; --hard-bg:#301b18;
+  --ok:#4cc585;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+  color:var(--ink);font-family:var(--body);line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:780px;margin:0 auto;padding-inline:16px;padding-block:0 56px}
+
+/* ---- header ---- */
+header{padding-block:34px 18px;text-align:center}
+.kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,6vw,2.5rem);margin:.3em 0 .15em;text-wrap:balance;line-height:1.2}
+.sub{color:var(--muted);font-size:.98rem;max-width:46ch;margin:0 auto}
+.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:16px;font-size:.82rem;color:var(--muted)}
+.legend b{color:var(--ink);font-weight:600}
+
+/* ---- control bar ---- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  background:color-mix(in srgb,var(--surface) 92%,transparent);
+  backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:14px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 14px;margin:8px 0 22px;box-shadow:0 4px 18px rgba(20,30,60,.06)}
+.progress{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.progress b{color:var(--ink);font-weight:600}
+.bar-sp{flex:1}
+.btn{font-family:var(--body);font-weight:600;font-size:.88rem;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface2);color:var(--ink);
+  padding:8px 14px;border-radius:10px;transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ---- question card ---- */
+.q{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:18px 18px 16px;margin-bottom:16px;position:relative;overflow:hidden}
+.q::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
+.q[data-level="hard"]::before{background:var(--accent)}
+.q-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.q-num{font-family:var(--disp);font-weight:700;font-size:1.15rem;color:var(--ink);
+  background:var(--surface2);border:1px solid var(--line);border-radius:9px;
+  min-width:38px;height:34px;display:inline-flex;align-items:center;justify-content:center;padding:0 8px}
+.tag{font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+.tag-mod{color:var(--mod);background:var(--mod-bg)}
+.tag-hard{color:var(--hard);background:var(--hard-bg)}
+.topic{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-left:auto;text-align:right}
+.q-body{font-size:1.02rem;color:var(--ink)}
+.q-body p{margin:.4em 0}
+
+/* math inline */
+.m{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;
+  background:var(--surface2);border:1px solid var(--line);border-radius:6px;
+  padding:.05em .4em;white-space:nowrap}
+.q-body b,.sol b.vq{color:var(--ink)}
+.given{margin-top:10px;padding:10px 12px;background:var(--blue-soft);border-radius:10px;font-size:.95rem}
+.given .lab{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:3px}
+
+/* reveal */
+.reveal{margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--body);font-weight:600;font-size:.9rem;cursor:pointer;
+  border:1.5px dashed var(--accent);color:var(--accent);background:var(--accent-soft);
+  padding:9px 16px;border-radius:11px;transition:.15s}
+.reveal:hover{background:var(--accent);color:#fff}
+.reveal:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.reveal .ar{transition:transform .2s}
+.reveal[aria-expanded="true"] .ar{transform:rotate(90deg)}
+
+.sol{margin-top:14px;padding:16px;background:var(--surface2);border:1px solid var(--line);
+  border-radius:12px;font-size:.97rem}
+.sol .sol-lab{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.sol ol{margin:0;padding-left:1.2em}
+.sol li{margin:.45em 0}
+.sol .note{color:var(--muted);font-size:.9rem}
+.ans{margin-top:12px;padding:11px 14px;background:var(--surface);
+  border:1.5px solid var(--ok);border-radius:10px;color:var(--ink);font-weight:600}
+.ans .lab{color:var(--ok);font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:3px;font-weight:600}
+
+footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:30px;line-height:1.7}
+footer .mono{font-family:var(--mono);font-size:.78rem}
+
+@media (max-width:460px){
+  .topic{display:none}
+  .q{padding:15px 14px 14px}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">একাদশ শ্রেণি · পদার্থবিজ্ঞান</div>
+    <h1>ভেক্টর: ২০টি সংখ্যাগত সমস্যা</h1>
+    <p class="sub">মাঝারি থেকে কঠিন মানের প্রশ্ন। প্রতিটির সম্পূর্ণ সমাধান লুকানো আছে — আগে নিজে চেষ্টা করো, তারপর “সমাধান দেখুন”-এ ট্যাপ করো।</p>
+    <div class="legend">
+      <span><span class="tag tag-mod">মাঝারি</span></span>
+      <span><span class="tag tag-hard">কঠিন</span></span>
+      <span>মোটা অক্ষর = <b>ভেক্টর</b> · <span class="m">î ĵ k̂</span> = একক ভেক্টর</span>
+    </div>
+  </header>
+
+  <div class="bar">
+    <span class="progress">সমাধান দেখা হয়েছে: <b id="count">০</b> / ২০</span>
+    <span class="bar-sp"></span>
+    <button class="btn" id="toggleAll">সব সমাধান দেখান</button>
+  </div>
+
+  <main id="list">
+
+    <!-- Q1 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">০১</span><span class="tag tag-mod">মাঝারি</span><span class="topic">লব্ধি ভেক্টর</span></div>
+      <div class="q-body">
+        <p><b>3</b> ও <b>5</b> একক মানের দুটি ভেক্টরের মধ্যবর্তী কোণ <span class="m">60°</span>। এদের লব্ধির মান এবং <b>3</b>-একক ভেক্টরের সাথে লব্ধির অভিমুখ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>লব্ধির মান, <span class="m">R = √(3² + 5² + 2·3·5·cos60°)</span></li>
+          <li><span class="m">R = √(9 + 25 + 30×0.5) = √49 = 7</span> একক।</li>
+          <li>অভিমুখ, <span class="m">tanα = 5·sin60° / (3 + 5·cos60°)</span></li>
+          <li><span class="m">tanα = 4.33 / 5.5 = 0.787</span> ⟹ <span class="m">α ≈ 38.2°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>লব্ধি = <span class="m">7</span> একক, 3-একক ভেক্টরের সাথে <span class="m">≈ 38.2°</span> কোণে।</div>
+      </div>
+    </article>
+
+    <!-- Q2 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">০২</span><span class="tag tag-mod">মাঝারি</span><span class="topic">মধ্যবর্তী কোণ</span></div>
+      <div class="q-body">
+        <p>প্রতিটি <b>10</b> একক মানের দুটি সমান ভেক্টরের লব্ধির মানও <b>10</b> একক। ভেক্টর দুটির মধ্যবর্তী কোণ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">R² = A² + B² + 2AB·cosθ</span></li>
+          <li><span class="m">10² = 10² + 10² + 2·10·10·cosθ</span></li>
+          <li><span class="m">100 = 200 + 200·cosθ</span> ⟹ <span class="m">cosθ = −0.5</span></li>
+          <li><span class="m">θ = 120°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>মধ্যবর্তী কোণ = <span class="m">120°</span></div>
+      </div>
+    </article>
+
+    <!-- Q3 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">০৩</span><span class="tag tag-mod">মাঝারি</span><span class="topic">উপাংশ</span></div>
+      <div class="q-body">
+        <p><b>50 N</b> একটি বল অনুভূমিক রেখার সাথে <span class="m">37°</span> কোণে ক্রিয়াশীল। এর অনুভূমিক ও উল্লম্ব উপাংশ নির্ণয় করো।</p>
+        <div class="given"><span class="lab">দেওয়া আছে</span><span class="m">sin37° = 0.6</span>, <span class="m">cos37° = 0.8</span></div>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>অনুভূমিক উপাংশ, <span class="m">Fₓ = 50·cos37° = 50×0.8 = 40 N</span></li>
+          <li>উল্লম্ব উপাংশ, <span class="m">F_y = 50·sin37° = 50×0.6 = 30 N</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>অনুভূমিক = <span class="m">40 N</span>, উল্লম্ব = <span class="m">30 N</span></div>
+      </div>
+    </article>
+
+    <!-- Q4 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">০৪</span><span class="tag tag-mod">মাঝারি</span><span class="topic">একক ভেক্টর</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= 3î − 4ĵ + 12k̂</span> ভেক্টর বরাবর একক ভেক্টর নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>মান, <span class="m">|A| = √(3² + (−4)² + 12²) = √(9 + 16 + 144) = √169 = 13</span></li>
+          <li>একক ভেক্টর, <span class="m">Â = A / |A|</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">Â = (3î − 4ĵ + 12k̂) / 13</span></div>
+      </div>
+    </article>
+
+    <!-- Q5 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">০৫</span><span class="tag tag-mod">মাঝারি</span><span class="topic">স্কেলার গুণফল</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= î + 2ĵ + 3k̂</span> এবং <b>B</b> <span class="m">= 3î + 2ĵ + k̂</span> — ভেক্টর দুটির মধ্যবর্তী কোণ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">A·B = (1)(3) + (2)(2) + (3)(1) = 3 + 4 + 3 = 10</span></li>
+          <li><span class="m">|A| = |B| = √(1 + 4 + 9) = √14</span></li>
+          <li><span class="m">cosθ = A·B / (|A||B|) = 10 / 14 = 0.714</span></li>
+          <li><span class="m">θ ≈ 44.4°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>মধ্যবর্তী কোণ <span class="m">≈ 44.4°</span></div>
+      </div>
+    </article>
+
+    <!-- Q6 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">০৬</span><span class="tag tag-mod">মাঝারি</span><span class="topic">লম্ব শর্ত</span></div>
+      <div class="q-body">
+        <p><span class="m">λ</span>-এর কোন মানের জন্য <b>A</b> <span class="m">= 2î + λĵ + k̂</span> এবং <b>B</b> <span class="m">= 4î − 2ĵ − 2k̂</span> পরস্পর লম্ব হবে?</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>লম্ব হলে <span class="m">A·B = 0</span></li>
+          <li><span class="m">(2)(4) + (λ)(−2) + (1)(−2) = 0</span></li>
+          <li><span class="m">8 − 2λ − 2 = 0 ⟹ 2λ = 6</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">λ = 3</span></div>
+      </div>
+    </article>
+
+    <!-- Q7 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">০৭</span><span class="tag tag-hard">কঠিন</span><span class="topic">ভেক্টর গুণফল · ক্ষেত্রফল</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= 3î + ĵ + 4k̂</span> ও <b>B</b> <span class="m">= î − ĵ + k̂</span> — এদের সন্নিহিত বাহু ধরে গঠিত সামান্তরিকের ক্ষেত্রফল নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>সামান্তরিকের ক্ষেত্রফল <span class="m">= |A × B|</span></li>
+          <li><span class="m">A × B = î(1·1 − 4·(−1)) − ĵ(3·1 − 4·1) + k̂(3·(−1) − 1·1)</span></li>
+          <li><span class="m">= î(1 + 4) − ĵ(3 − 4) + k̂(−3 − 1) = 5î + ĵ − 4k̂</span></li>
+          <li><span class="m">|A × B| = √(25 + 1 + 16) = √42 ≈ 6.48</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>ক্ষেত্রফল <span class="m">= √42 ≈ 6.48</span> বর্গ একক।</div>
+      </div>
+    </article>
+
+    <!-- Q8 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">০৮</span><span class="tag tag-hard">কঠিন</span><span class="topic">ত্রিভুজের ক্ষেত্রফল</span></div>
+      <div class="q-body">
+        <p>একটি ত্রিভুজের শীর্ষবিন্দু তিনটি <span class="m">A(1, 2, 3)</span>, <span class="m">B(2, −1, 1)</span> ও <span class="m">C(3, 2, −1)</span>। ভেক্টর পদ্ধতিতে ত্রিভুজের ক্ষেত্রফল নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>বাহু-ভেক্টর, <span class="m">AB = B − A = î − 3ĵ − 2k̂</span></li>
+          <li><span class="m">AC = C − A = 2î + 0ĵ − 4k̂</span></li>
+          <li><span class="m">AB × AC = î((−3)(−4) − (−2)(0)) − ĵ((1)(−4) − (−2)(2)) + k̂((1)(0) − (−3)(2))</span></li>
+          <li><span class="m">= 12î + 0ĵ + 6k̂</span>; <span class="m">|AB × AC| = √(144 + 36) = √180 = 6√5</span></li>
+          <li>ক্ষেত্রফল <span class="m">= ½·|AB × AC| = ½·6√5 = 3√5</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>ক্ষেত্রফল <span class="m">= 3√5 ≈ 6.71</span> বর্গ একক।</div>
+      </div>
+    </article>
+
+    <!-- Q9 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">০৯</span><span class="tag tag-hard">কঠিন</span><span class="topic">লব্ধির শর্ত</span></div>
+      <div class="q-body">
+        <p>দুটি ভেক্টর <b>A</b> ও <b>B</b>-এর লব্ধি <b>A</b>-এর উপর লম্ব এবং লব্ধির মান <b>B</b>-এর মানের অর্ধেক। <b>A</b> ও <b>B</b>-এর মধ্যবর্তী কোণ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>লব্ধি <span class="m">R = A + B</span>, মধ্যবর্তী কোণ <span class="m">θ</span>।</li>
+          <li><b>R ⊥ A</b> ⟹ <span class="m">R·A = 0</span> ⟹ <span class="m">|A|² + |A||B|cosθ = 0</span> ⟹ <span class="m">|B|cosθ = −|A|</span> …(i)</li>
+          <li><span class="m">|R|² = |A|² + |B|² + 2|A||B|cosθ</span>; (i) বসিয়ে <span class="m">= |A|² + |B|² − 2|A|² = |B|² − |A|²</span></li>
+          <li>শর্ত <span class="m">|R| = |B|/2</span> ⟹ <span class="m">|B|² − |A|² = |B|²/4</span> ⟹ <span class="m">|A|² = ¾|B|²</span> ⟹ <span class="m">|A| = (√3/2)|B|</span></li>
+          <li>(i) থেকে <span class="m">cosθ = −|A|/|B| = −√3/2</span> ⟹ <span class="m">θ = 150°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>মধ্যবর্তী কোণ = <span class="m">150°</span></div>
+      </div>
+    </article>
+
+    <!-- Q10 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">১০</span><span class="tag tag-mod">মাঝারি</span><span class="topic">অভিক্ষেপ</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= î + 2ĵ + 2k̂</span> ভেক্টরের <b>B</b> <span class="m">= 2î + ĵ + 2k̂</span> বরাবর স্কেলার অভিক্ষেপ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>অভিক্ষেপ <span class="m">= A·B / |B|</span></li>
+          <li><span class="m">A·B = (1)(2) + (2)(1) + (2)(2) = 8</span></li>
+          <li><span class="m">|B| = √(4 + 1 + 4) = 3</span></li>
+          <li>অভিক্ষেপ <span class="m">= 8 / 3 ≈ 2.67</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><b>B</b> বরাবর অভিক্ষেপ <span class="m">= 8/3 ≈ 2.67</span> একক।</div>
+      </div>
+    </article>
+
+    <!-- Q11 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">১১</span><span class="tag tag-mod">মাঝারি</span><span class="topic">বলের লব্ধি</span></div>
+      <div class="q-body">
+        <p>একটি বিন্দুতে তিনটি বল ক্রিয়াশীল: <b>F₁</b> <span class="m">= 2î + 3ĵ</span>, <b>F₂</b> <span class="m">= −î + 4ĵ</span>, <b>F₃</b> <span class="m">= 3î − 2ĵ</span> (N)। লব্ধি বলের মান ও <span class="m">x</span>-অক্ষের সাথে অভিমুখ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">ΣF = (2 − 1 + 3)î + (3 + 4 − 2)ĵ = 4î + 5ĵ</span></li>
+          <li>মান, <span class="m">|R| = √(4² + 5²) = √41 ≈ 6.40 N</span></li>
+          <li>অভিমুখ, <span class="m">θ = tan⁻¹(5/4) ≈ 51.3°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>লব্ধি <span class="m">≈ 6.40 N</span>, <span class="m">x</span>-অক্ষের সাথে <span class="m">≈ 51.3°</span>।</div>
+      </div>
+    </article>
+
+    <!-- Q12 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">১২</span><span class="tag tag-mod">মাঝারি</span><span class="topic">ভেক্টর বিয়োগ</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= 3î + 2ĵ − k̂</span> এবং <b>B</b> <span class="m">= î − 3ĵ + 4k̂</span>। <span class="m">(A − B)</span>-এর মান নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">A − B = (3−1)î + (2−(−3))ĵ + (−1−4)k̂ = 2î + 5ĵ − 5k̂</span></li>
+          <li><span class="m">|A − B| = √(2² + 5² + (−5)²) = √(4 + 25 + 25) = √54 = 3√6</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">|A − B| = 3√6 ≈ 7.35</span> একক।</div>
+      </div>
+    </article>
+
+    <!-- Q13 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">১৩</span><span class="tag tag-mod">মাঝারি</span><span class="topic">দিক কোসাইন</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= î + ĵ + k̂</span> ভেক্টরটি <span class="m">x</span>, <span class="m">y</span> ও <span class="m">z</span> অক্ষের সাথে কত কোণ করে?</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">|A| = √(1 + 1 + 1) = √3</span></li>
+          <li>দিক কোসাইন, <span class="m">cosα = cosβ = cosγ = 1/√3 ≈ 0.577</span></li>
+          <li>প্রতিটি কোণ <span class="m">= cos⁻¹(1/√3) ≈ 54.7°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>তিনটি অক্ষের সাথেই <span class="m">≈ 54.7°</span> কোণ।</div>
+      </div>
+    </article>
+
+    <!-- Q14 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">১৪</span><span class="tag tag-hard">কঠিন</span><span class="topic">আপেক্ষিক বেগ</span></div>
+      <div class="q-body">
+        <p>একজন মানুষ <b>3 m/s</b> বেগে পূর্বদিকে হাঁটছে, আর বৃষ্টি <b>4 m/s</b> বেগে উল্লম্বভাবে নিচে পড়ছে। মানুষের সাপেক্ষে বৃষ্টির বেগের মান ও দিক নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>পূর্ব = <span class="m">+î</span>, উপর = <span class="m">+ĵ</span> ধরি। <span class="m">V_man = 3î</span>, <span class="m">V_rain = −4ĵ</span>।</li>
+          <li><span class="m">V_(rain,man) = V_rain − V_man = −3î − 4ĵ</span></li>
+          <li>মান <span class="m">= √(3² + 4²) = 5 m/s</span></li>
+          <li>উল্লম্বের সাথে কোণ <span class="m">tanθ = 3/4 ⟹ θ = 36.9°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">5 m/s</span>, উল্লম্বের সাথে <span class="m">≈ 36.9°</span> কোণে (মানুষের গতির বিপরীতে অর্থাৎ পশ্চিম দিকে হেলানো)।</div>
+      </div>
+    </article>
+
+    <!-- Q15 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">১৫</span><span class="tag tag-hard">কঠিন</span><span class="topic">সর্বোচ্চ-সর্বনিম্ন লব্ধি</span></div>
+      <div class="q-body">
+        <p>দুটি বলের সর্বোচ্চ লব্ধি <b>17 N</b> ও সর্বনিম্ন লব্ধি <b>7 N</b>। বল দুটির মান নির্ণয় করো এবং এরা পরস্পর লম্বভাবে ক্রিয়া করলে লব্ধি কত হবে?</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>সর্বোচ্চ লব্ধি <span class="m">P + Q = 17</span> (কোণ <span class="m">0°</span>)</li>
+          <li>সর্বনিম্ন লব্ধি <span class="m">P − Q = 7</span> (কোণ <span class="m">180°</span>)</li>
+          <li>সমাধান করে <span class="m">P = 12 N</span>, <span class="m">Q = 5 N</span></li>
+          <li>লম্ব হলে <span class="m">R = √(P² + Q²) = √(144 + 25) = √169 = 13 N</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">P = 12 N</span>, <span class="m">Q = 5 N</span>; লম্ব অবস্থায় লব্ধি <span class="m">= 13 N</span>।</div>
+      </div>
+    </article>
+
+    <!-- Q16 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">১৬</span><span class="tag tag-mod">মাঝারি</span><span class="topic">যোগ-বিয়োগ সমমান</span></div>
+      <div class="q-body">
+        <p>যদি <span class="m">|A + B| = |A − B|</span> হয়, তবে <b>A</b> ও <b>B</b>-এর মধ্যবর্তী কোণ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>উভয় পক্ষ বর্গ করে: <span class="m">A² + B² + 2A·B = A² + B² − 2A·B</span></li>
+          <li><span class="m">4·A·B = 0 ⟹ A·B = 0</span></li>
+          <li><span class="m">|A||B|cosθ = 0 ⟹ cosθ = 0</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>মধ্যবর্তী কোণ <span class="m">= 90°</span> (A ও B পরস্পর লম্ব)।</div>
+      </div>
+    </article>
+
+    <!-- Q17 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">১৭</span><span class="tag tag-hard">কঠিন</span><span class="topic">ডট ও ক্রস সম্পর্ক</span></div>
+      <div class="q-body">
+        <p>দুটি ভেক্টর <b>A</b> ও <b>B</b>-এর জন্য <span class="m">|A × B| = √3 (A·B)</span> হলে, এদের মধ্যবর্তী কোণ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">|A × B| = |A||B|sinθ</span>, <span class="m">A·B = |A||B|cosθ</span></li>
+          <li>শর্ত থেকে <span class="m">|A||B|sinθ = √3·|A||B|cosθ</span></li>
+          <li><span class="m">tanθ = √3 ⟹ θ = 60°</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>মধ্যবর্তী কোণ <span class="m">= 60°</span></div>
+      </div>
+    </article>
+
+    <!-- Q18 -->
+    <article class="q" data-level="mod">
+      <div class="q-head"><span class="q-num">১৮</span><span class="tag tag-mod">মাঝারি</span><span class="topic">কাজ = F·d</span></div>
+      <div class="q-body">
+        <p><b>F</b> <span class="m">= 2î + 3ĵ + 4k̂</span> N বল প্রয়োগে একটি বস্তুর সরণ <b>d</b> <span class="m">= 3î + 4ĵ + 5k̂</span> m হলে কৃতকাজ নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li>কৃতকাজ <span class="m">W = F·d</span></li>
+          <li><span class="m">W = (2)(3) + (3)(4) + (4)(5) = 6 + 12 + 20 = 38</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span>কৃতকাজ <span class="m">= 38 J</span></div>
+      </div>
+    </article>
+
+    <!-- Q19 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">১৯</span><span class="tag tag-hard">কঠিন</span><span class="topic">টর্ক = r × F</span></div>
+      <div class="q-body">
+        <p>একটি বিন্দুর অবস্থান ভেক্টর <b>r</b> <span class="m">= 3î + 2ĵ − k̂</span> m এবং প্রযুক্ত বল <b>F</b> <span class="m">= 2î − ĵ + 3k̂</span> N। ঐ বিন্দুতে টর্ক <span class="m">τ = r × F</span> ও তার মান নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">τ = î(2·3 − (−1)(−1)) − ĵ(3·3 − (−1)(2)) + k̂(3·(−1) − 2·2)</span></li>
+          <li><span class="m">= î(6 − 1) − ĵ(9 + 2) + k̂(−3 − 4) = 5î − 11ĵ − 7k̂</span></li>
+          <li>মান <span class="m">|τ| = √(5² + 11² + 7²) = √(25 + 121 + 49) = √195 ≈ 13.96</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">τ = 5î − 11ĵ − 7k̂ N·m</span>, <span class="m">|τ| ≈ 13.96 N·m</span>।</div>
+      </div>
+    </article>
+
+    <!-- Q20 -->
+    <article class="q" data-level="hard">
+      <div class="q-head"><span class="q-num">২০</span><span class="tag tag-hard">কঠিন</span><span class="topic">সমান্তরাল একক ভেক্টর</span></div>
+      <div class="q-body">
+        <p><b>A</b> <span class="m">= 4î − ĵ + 3k̂</span> ও <b>B</b> <span class="m">= −2î + ĵ − 2k̂</span>। <span class="m">(A + B)</span> ভেক্টরের সমান্তরালে একটি একক ভেক্টর নির্ণয় করো।</p>
+      </div>
+      <button class="reveal" aria-expanded="false"><span class="ar">▸</span> সমাধান দেখুন</button>
+      <div class="sol" hidden>
+        <div class="sol-lab">সমাধান</div>
+        <ol>
+          <li><span class="m">A + B = (4−2)î + (−1+1)ĵ + (3−2)k̂ = 2î + 0ĵ + k̂</span></li>
+          <li><span class="m">|A + B| = √(2² + 0² + 1²) = √5</span></li>
+          <li>একক ভেক্টর <span class="m">= (A + B) / |A + B|</span></li>
+        </ol>
+        <div class="ans"><span class="lab">উত্তর</span><span class="m">(2î + k̂) / √5</span></div>
+      </div>
+    </article>
+
+  </main>
+
+  <footer>
+    <div>একাদশ শ্রেণি · পদার্থবিজ্ঞান · ভেক্টর অধ্যায়</div>
+    <div class="mono">২০টি সংখ্যাগত সমস্যা · মাঝারি–কঠিন</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KEY="vec20_open_v1";
+  var cards=[].slice.call(document.querySelectorAll(".q"));
+  var countEl=document.getElementById("count");
+  var toggleAll=document.getElementById("toggleAll");
+  var bn=["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  function toBn(n){return String(n).split("").map(function(c){return /[0-9]/.test(c)?bn[+c]:c;}).join("");}
+  var open={};
+  try{open=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){open={};}
+
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(open));}catch(e){}}
+  function refresh(){
+    var n=0;
+    cards.forEach(function(c,i){ if(open[i]) n++; });
+    countEl.textContent=toBn(n);
+    var allOpen=n===cards.length;
+    toggleAll.textContent=allOpen?"সব সমাধান লুকান":"সব সমাধান দেখান";
+  }
+  function setState(card,i,isOpen){
+    var btn=card.querySelector(".reveal");
+    var sol=card.querySelector(".sol");
+    sol.hidden=!isOpen;
+    btn.setAttribute("aria-expanded",isOpen?"true":"false");
+    btn.lastChild.textContent=isOpen?" সমাধান লুকান":" সমাধান দেখুন";
+    open[i]=isOpen; if(!isOpen) delete open[i];
+  }
+  cards.forEach(function(card,i){
+    var btn=card.querySelector(".reveal");
+    if(open[i]) setState(card,i,true);
+    btn.addEventListener("click",function(){
+      var isOpen=btn.getAttribute("aria-expanded")==="true";
+      setState(card,i,!isOpen); save(); refresh();
+    });
+  });
+  toggleAll.addEventListener("click",function(){
+    var allOpen=cards.every(function(c,i){return open[i];});
+    cards.forEach(function(c,i){ setState(c,i,!allOpen); });
+    save(); refresh();
+  });
+  refresh();
+})();
+</script>
+</body>
+</html>
